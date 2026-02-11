@@ -80,10 +80,71 @@ export const useGameStore = create((set) => ({
       return { field: newField, bench: newBench }
     }),
 
+  // Lineup: Array de 9 slots para el orden al bate
+  lineup: Array(9).fill(null),
+
+  // Acción para asignar un jugador a un slot del lineup (0-8)
+  setLineupSlot: (index, playerId) =>
+    set((state) => {
+      const newLineup = [...state.lineup]
+
+      // Si el jugador ya está en otro slot, lo quitamos de allí (evitar duplicados en el lineup)
+      const existingIndex = newLineup.indexOf(playerId)
+      if (existingIndex !== -1 && existingIndex !== index) {
+        newLineup[existingIndex] = null
+      }
+
+      newLineup[index] = playerId
+      return { lineup: newLineup }
+    }),
+
+  // Reordenar todo el lineup
+  reorderLineup: (newLineup) => set({ lineup: newLineup }),
+
+  // Quitar jugador del lineup
+  removeFromLineup: (index) =>
+    set((state) => {
+      const newLineup = [...state.lineup]
+      newLineup[index] = null
+      return { lineup: newLineup }
+    }),
+
+  // Rotation: Array de 4 slots para abridores (vs Israel, PR, Nic, RD)
+  rotation: Array(4).fill(null),
+
+  // Acción para asignar un pitcher a la rotación
+  setRotationSlot: (index, playerId) =>
+    set((state) => {
+      const newRotation = [...state.rotation]
+
+      // Si el pitcher ya está en otro slot de rotación, quitarlo de allí
+      const existingIndex = newRotation.indexOf(playerId)
+      if (existingIndex !== -1 && existingIndex !== index) {
+        newRotation[existingIndex] = null
+      }
+
+      newRotation[index] = playerId
+      return { rotation: newRotation }
+    }),
+
+  // Quitar pitcher de la rotación
+  removeFromRotation: (index) =>
+    set((state) => {
+      const newRotation = [...state.rotation]
+      newRotation[index] = null
+      return { rotation: newRotation }
+    }),
+
   // Resetear todo
   reset: () =>
     set({
       field: { ...initialField },
       bench: [],
+      lineup: Array(9).fill(null),
+      rotation: Array(4).fill(null),
+      selectedPlayer: null,
+      managerFullName: ''
     }),
+
+  setManagerFullName: (name) => set({ managerFullName: name }),
 }))

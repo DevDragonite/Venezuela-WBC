@@ -7,19 +7,19 @@
       "throws": "L"
     },
     {
-      "personId": 641959,
+      "personId": 660825,
       "name": "Eduard Bazardo",
       "position": "P",
       "throws": "R"
     },
     {
-      "personId": 665510,
+      "personId": 676130,
       "name": "José Buttó",
       "position": "P",
       "throws": "R"
     },
     {
-      "personId": 672390,
+      "personId": 646241,
       "name": "Enmanuel De Jesus",
       "position": "P",
       "throws": "L"
@@ -31,10 +31,10 @@
       "throws": "R"
     },
     {
-      "personId": 694398,
-      "name": "Carlos Guzmán",
+      "name": "Carlos Guzman",
       "position": "P",
-      "throws": "R"
+      "personId": 664346,
+      "photo": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/664346/headshot/milb/current"
     },
     {
       "personId": 641154,
@@ -55,25 +55,25 @@
       "throws": "R"
     },
     {
-      "personId": 672780,
+      "personId": 672456,
       "name": "Keider Montero",
       "position": "P",
       "throws": "R"
     },
     {
-      "personId": 672907,
+      "personId": 665996,
       "name": "Oddanier Mosqueda",
       "position": "P",
       "throws": "L"
     },
     {
-      "personId": 672768,
+      "personId": 694037,
       "name": "Daniel Palencia",
       "position": "P",
       "throws": "R"
     },
     {
-      "personId": 676498,
+      "personId": 645307,
       "name": "Ricardo Sánchez",
       "position": "P",
       "throws": "L"
@@ -112,61 +112,66 @@
     {
       "personId": 521692,
       "name": "Salvador Pérez",
-      "position": "C"
+      "position": "C/1B"
     },
     {
       "personId": 575929,
       "name": "Willson Contreras",
-      "position": "C"
+      "position": "C/1B"
     }
   ],
   "infielders": [
     {
       "personId": 650333,
       "name": "Luis Arráez",
-      "position": "1B"
+      "position": "IF"
     },
     {
       "personId": 665926,
       "name": "Andrés Giménez",
-      "position": "2B"
+      "position": "IF"
     },
     {
       "personId": 672580,
       "name": "Maikel Garcia",
-      "position": "SS"
+      "position": "IF"
     },
     {
       "personId": 553993,
       "name": "Eugenio Suárez",
-      "position": "3B"
+      "position": "IF"
     },
     {
       "personId": 650402,
       "name": "Gleyber Torres",
-      "position": "DH"
+      "position": "IF"
     },
     {
-      "personId": 678545,
+      "personId": 678662,
       "name": "Ezequiel Tovar",
-      "position": "SS"
+      "position": "IF"
+    },
+    {
+      "personId": 691594,
+      "name": "Javier Sanoja",
+      "position": "UT"
     }
   ],
   "outfielders": [
     {
       "personId": 660670,
       "name": "Ronald Acuña Jr.",
-      "position": "CF"
+      "position": "OF"
     },
     {
-      "personId": 673450,
+      "personId": 677800,
       "name": "Wilyer Abreu",
-      "position": "RF"
+      "position": "OF"
     },
     {
       "personId": 694192,
       "name": "Jackson Chourio",
-      "position": "LF"
+      "position": "OF"
     }
   ]
 }

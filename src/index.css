@@ -9,3 +9,12 @@
 body {
   background-color: #1a0509;
 }
+
+@keyframes shimmer {
+  0% { transform: translateX(-150%) skewX(-25deg); }
+  100% { transform: translateX(250%) skewX(-25deg); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}

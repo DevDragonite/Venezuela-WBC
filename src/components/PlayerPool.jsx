@@ -11,8 +11,18 @@ const ALL_PLAYERS = [
 ]
 const PLAYER_MAP = Object.fromEntries(ALL_PLAYERS.map((p) => [p.personId, p]))
 
-/* Helper para URL de headshot MLB */
-const headshot = (personId) =>
+/**
+ * Retorna la URL del headshot. Intenta cargar una imagen local primero,
+ * y si no existe (o si el ID es de MLB), usa la URL oficial de MLB.
+ */
+const headshot = (personId) => {
+    const player = PLAYER_MAP[personId]
+    if (player && player.photo) return player.photo
+    return `/assets/players/${personId}.png`
+}
+
+// The original MLB URL for fallback:
+const MLB_HEADSHOT_URL = (personId) =>
     `https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${personId}/headshot/67/current`
 
 /* Categorías de visualización */
@@ -25,6 +35,12 @@ const CATEGORIES = [
 
 export { PLAYER_MAP, headshot }
 
+// Helper parafallback de imagen
+export const handleImageError = (e, personId) => {
+    e.target.src = `https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${personId}/headshot/67/current`
+    e.target.onerror = null // Evitar loop infinito
+}
+
 export default function PlayerPool() {
     const bench = useGameStore((s) => s.bench)
     const selectedPlayer = useGameStore((s) => s.selectedPlayer)
@@ -35,7 +51,7 @@ export default function PlayerPool() {
     useEffect(() => {
         const allIds = ALL_PLAYERS.map((p) => p.personId)
         initBench(allIds)
-    }, [initBench])
+    }, [initBench, ALL_PLAYERS])
 
     /* Bench como Set para lookup rápido */
     const benchSet = useMemo(() => new Set(bench), [bench])
@@ -77,12 +93,15 @@ export default function PlayerPool() {
                     `}
                                     >
                                         {/* Headshot */}
-                                        <img
-                                            src={headshot(player.personId)}
-                                            alt={player.name}
-                                            className="w-10 h-10 rounded-lg object-cover bg-black/40 flex-shrink-0"
-                                            loading="lazy"
-                                        />
+                                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-black/40 flex-shrink-0">
+                                            <img
+                                                src={headshot(player.personId)}
+                                                onError={(e) => handleImageError(e, player.personId)}
+                                                alt={player.name}
+                                                className="w-full h-full object-cover"
+                                                loading="lazy"
+                                            />
+                                        </div>
 
                                         {/* Info */}
                                         <div className="min-w-0 flex-1">

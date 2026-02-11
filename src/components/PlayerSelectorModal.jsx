@@ -1,5 +1,5 @@
 import { useGameStore } from '../store/useGameStore'
-import { PLAYER_MAP, headshot } from './PlayerPool'
+import { PLAYER_MAP, headshot, handleImageError } from './PlayerPool'
 import rosterData from '../data/players.json'
 
 const ALL_PLAYERS = [
@@ -9,37 +9,67 @@ const ALL_PLAYERS = [
     ...rosterData.outfielders,
 ]
 
-export default function PlayerSelectorModal({ position, onClose }) {
+export default function PlayerSelectorModal({ position, onClose, onSelect }) {
     const bench = useGameStore((s) => s.bench)
     const field = useGameStore((s) => s.field)
+    const lineup = useGameStore((s) => s.lineup)
+    const rotation = useGameStore((s) => s.rotation)
     const movePlayer = useGameStore((s) => s.movePlayer)
 
     if (!position) return null
 
+    // Determinar qué IDs excluir según el contexto (Campo o Lineup)
+    let takenIds = []
+    if (position.startsWith('Bateador')) {
+        // En Lineup: excluir jugadores ya en el lineup
+        takenIds = lineup.filter(id => id !== null)
+    } else {
+        // En Campo (incluyendo DH visual): excluir jugadores ya en el campo o rotación
+        takenIds = [
+            ...Object.values(field),
+            ...rotation
+        ].filter(id => id !== null)
+    }
+
     // Filtrar jugadores disponibles para esta posición
     const availablePlayers = ALL_PLAYERS.filter((player) => {
-        // Debe estar en la banca O en el campo
-        const isAvailable = bench.includes(player.personId) || Object.values(field).includes(player.personId)
+        // Excluir si ya está tomado en el contexto actual
+        if (takenIds.includes(player.personId)) return false
 
-        // Filtrar por posición
-        if (position === 'P') return player.position === 'P' && isAvailable
-        if (position === 'C') return player.position === 'C' && isAvailable
-        if (position === '1B') return player.position === '1B' && isAvailable
-        if (position === '2B') return player.position === '2B' && isAvailable
-        if (position === '3B') return player.position === '3B' && isAvailable
-        if (position === 'SS') return player.position === 'SS' && isAvailable
-        if (position === 'LF' || position === 'CF' || position === 'RF') {
-            return ['LF', 'CF', 'RF'].includes(player.position) && isAvailable
+        // REGLAS PRECISAS POR POSICIÓN
+
+        // Pitcher (solo para rotación manual si llegara a usarse aquí, aunque StartingRotation filtra aparte con "P")
+        if (position === 'P') return player.position === 'P'
+
+        // Lineup (Bateador X): Cualquier jugador de posición (no pitchers)
+        if (position.startsWith('Bateador')) {
+            return player.position !== 'P'
         }
-        if (position === 'DH') {
-            // DH puede ser cualquier jugador
-            return isAvailable
-        }
+
+        // Catcher: Solo C y C/1B (UT excluido según reglas de Sanoja/UT general para catcher)
+        if (position === 'C') return ['C', 'C/1B'].includes(player.position)
+
+        // 1B: IF y C/1B (UT excluido para 1B según regla de Sanoja)
+        if (position === '1B') return ['IF', 'C/1B'].includes(player.position)
+
+        // 2B, 3B, SS: IF y UT
+        if (['2B', '3B', 'SS'].includes(position)) return ['IF', 'UT'].includes(player.position)
+
+        // Outfield: OF y UT
+        if (['LF', 'CF', 'RF'].includes(position)) return ['OF', 'UT'].includes(player.position)
+
+        // DH (en campo): Cualquier NO Pitcher
+        if (position === 'DH') return player.position !== 'P'
+
         return false
     })
 
     const handleSelect = (playerId) => {
-        movePlayer(playerId, position)
+        if (onSelect) {
+            onSelect(playerId)
+        } else {
+            movePlayer(playerId, position)
+        }
         onClose()
     }
 
@@ -92,6 +122,7 @@ export default function PlayerSelectorModal({ position, onClose }) {
                                     {/* Headshot */}
                                     <img
                                         src={headshot(player.personId)}
+                                        onError={(e) => handleImageError(e, player.personId)}
                                         alt={player.name}
                                         className="w-16 h-16 rounded-xl object-cover bg-black/40 flex-shrink-0"
                                     />
