@@ -201,10 +201,11 @@ export default function BaseballField() {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="w-full relative py-2 md:py-4">
+      <div className="w-full max-w-[95vw] aspect-square mx-auto flex items-center justify-center relative py-2 md:py-4">
         <svg
           viewBox="0 0 500 520"
-          className="mx-auto block h-auto w-full max-w-[560px] touch-pan-y"
+          width="100%"
+          className="block h-auto touch-pan-y"
           preserveAspectRatio="xMidYMid meet"
         >
           {/* Definiciones */}
@@ -278,10 +279,12 @@ export default function BaseballField() {
                       className="w-full h-full flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 group bg-black/40 border-white/20 hover:bg-black/60 rounded-lg border shadow-lg backdrop-blur-sm overflow-hidden"
                       onClick={() => handlePositionClick(pos)}
                     >
-                      <div className={`${isMobile ? 'text-lg' : 'text-xl'} font-black text-[#D4AF37]/50 opacity-30 group-hover:opacity-100 transition-opacity`}>
-                        +
+                      <div className="w-9 h-9 lg:w-12 lg:h-12 flex items-center justify-center">
+                        <span className="text-lg lg:text-xl font-black text-[#D4AF37]/50 opacity-30 group-hover:opacity-100 transition-opacity">
+                          +
+                        </span>
                       </div>
-                      <div className={`${isMobile ? 'text-[8px]' : 'text-[10px]'} font-bold text-[#D4AF37] mt-1`}>{pos}</div>
+                      <div className="text-[10px] lg:text-xs font-bold text-[#D4AF37] mt-0.5">{pos}</div>
                     </div>
                   )}
                 </DroppablePosition>

@@ -87,22 +87,22 @@ function App() {
         </div>
       </header>
 
-      {/* Grid Principal Granular: 3 Rangos de alineación */}
-      <main className="max-w-[1700px] mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-8 lg:gap-y-0 items-start">
+      {/* Grid Principal Granular: Mobile First Flex / Desktop Grid */}
+      <main className="max-w-[1700px] mx-auto px-4 md:px-6 py-4 md:py-6 flex flex-col lg:grid lg:grid-cols-12 gap-x-10 gap-y-8 lg:gap-y-0 items-start">
 
-        {/* ROW 1: Campo Izquierda vs Lineup Derecha */}
-        <div className="lg:col-span-8 order-1 bg-gradient-to-br from-black/60 to-transparent rounded-[2rem] lg:rounded-b-none lg:rounded-t-[3rem] p-4 md:p-8 border border-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
+        {/* 1. Campo (Diamante - Arriba en móvil) */}
+        <div className="w-full lg:col-span-8 order-1 bg-gradient-to-br from-black/60 to-transparent rounded-[2rem] lg:rounded-b-none lg:rounded-t-[3rem] p-4 md:p-8 border border-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B1021]/10 blur-[120px] -z-10"></div>
           <BaseballField />
         </div>
 
-        {/* Lineup (Ocupa toda la altura de la fila 1) */}
-        <div className="lg:col-span-4 order-2 flex flex-col h-full">
+        {/* 2. Lineup (Abajo del campo en móvil) */}
+        <div className="w-full lg:col-span-4 order-2 flex flex-col h-full lg:row-span-1">
           <LineupPanel />
         </div>
 
-        {/* 3. Header Rotación (Izquierda Medio) */}
-        <div className="lg:col-span-8 order-3 bg-gradient-to-br from-black/60 to-transparent border-l border-r border-t lg:border-t-0 border-white px-8 rounded-t-[2rem] lg:rounded-none">
+        {/* 3. Header Rotación (Parte del bloque de rotación) */}
+        <div className="w-full lg:col-span-8 order-3 bg-gradient-to-br from-black/60 to-transparent border-l border-r border-t lg:border-t-0 border-white px-6 md:px-8 rounded-t-[2rem] lg:rounded-none">
           <div className="flex items-center gap-4 py-6 border-t border-white/10 lg:border-t-0">
             <h3 className="text-[#D4AF37] font-black italic text-2xl uppercase tracking-tighter whitespace-nowrap">
               Rotación de Abridores
@@ -111,33 +111,33 @@ function App() {
           </div>
         </div>
 
-        {/* 4. Botón Publicar (Derecha - Abarca 2 filas en Desktop) */}
-        <div className="lg:col-span-4 lg:row-span-2 order-5 lg:order-4 flex flex-col pt-0 lg:pt-6 h-full min-h-[160px] lg:min-h-0">
+        {/* 4. Cartas Rotación (Al final en móvil, antes del botón) */}
+        <div className="w-full lg:col-span-8 order-4 bg-gradient-to-br from-black/60 to-transparent rounded-b-[2rem] lg:rounded-b-[3rem] p-4 md:p-8 pt-0 border-b border-l border-r border-white shadow-2xl relative overflow-hidden">
+          <StartingRotation onlyCards={true} />
+        </div>
+
+        {/* 5. Botón Publicar (Sticky en móvil, Grid item en PC) */}
+        <div className="w-full lg:col-span-4 lg:row-span-2 order-5 flex flex-col sticky bottom-2 z-[100] lg:static lg:bottom-auto pt-4 lg:pt-6">
           <button
             onClick={handlePublishClick}
             disabled={isCapturing}
             className={`
-              flex-1 group relative flex flex-col items-center justify-center gap-4 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-0 font-black uppercase tracking-[0.4em] transition-all overflow-hidden border border-white shadow-2xl
+              w-full min-h-[80px] lg:min-h-0 flex-1 group relative flex flex-col items-center justify-center gap-2 lg:gap-4 rounded-2xl lg:rounded-[2.5rem] p-4 lg:p-0 font-black uppercase tracking-[0.2em] lg:tracking-[0.4em] transition-all overflow-hidden border border-white shadow-2xl backdrop-blur-md bg-black/40 lg:bg-transparent
               ${isCapturing
-                ? 'bg-white/10 text-white/40 cursor-wait'
-                : 'bg-gradient-to-br from-[#FFD700] via-[#D4AF37] to-[#8B6B10] text-[#1a0509] hover:scale-[1.01] active:scale-[0.99] shadow-[0_20px_60px_rgba(212,175,55,0.2)] hover:shadow-[0_30px_80px_rgba(212,175,55,0.4)]'}
+                ? 'opacity-50 cursor-wait'
+                : 'bg-gradient-to-br from-[#FFD700] via-[#D4AF37] to-[#8B6B10] text-[#1a0509] hover:scale-[1.01] active:scale-[0.99] shadow-[0_20px_60px_rgba(212,175,55,0.2)]'}
             `}
           >
             <div className="absolute inset-0 w-full h-full bg-white/10 skew-x-[-25deg] -translate-x-full group-hover:animate-[shimmer_2s_infinite]"></div>
 
-            <div className="relative z-10 flex flex-col items-center gap-3">
-              <span className="text-4xl lg:text-5xl mb-2">{isCapturing ? '⌛' : '🏆'}</span>
+            <div className="relative z-10 flex flex-row lg:flex-col items-center gap-3">
+              <span className="text-2xl lg:text-5xl">{isCapturing ? '⌛' : '🏆'}</span>
               <div className="text-center font-black">
-                <span className="text-lg lg:text-xl block mb-1">{isCapturing ? 'GENERANDO...' : 'PUBLICAR'}</span>
-                <span className="text-xl lg:text-2xl tracking-[0.2em]">{isCapturing ? 'ESPERE' : 'MI LINEUP'}</span>
+                <span className="text-sm lg:text-xl block mb-0.5 lg:mb-1">{isCapturing ? 'GENERANDO...' : 'PUBLICAR'}</span>
+                <span className="text-base lg:text-2xl tracking-[0.1em] lg:tracking-[0.2em]">{isCapturing ? 'ESPERE' : 'MI LINEUP'}</span>
               </div>
             </div>
           </button>
-        </div>
-
-        {/* 5. Cartas Rotación (Izquierda Inferior) */}
-        <div className="lg:col-span-8 order-4 lg:order-5 bg-gradient-to-br from-black/60 to-transparent rounded-b-[2rem] lg:rounded-b-[3rem] p-4 md:p-8 pt-0 border-b border-l border-r border-white shadow-2xl relative overflow-hidden">
-          <StartingRotation onlyCards={true} />
         </div>
       </main>
 
