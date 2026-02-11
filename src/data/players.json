@@ -1,0 +1,172 @@
+{
+  "lanzadores": [
+    {
+      "personId": 621237,
+      "name": "José Alvarado",
+      "position": "P",
+      "throws": "L"
+    },
+    {
+      "personId": 641959,
+      "name": "Eduard Bazardo",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 665510,
+      "name": "José Buttó",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 672390,
+      "name": "Enmanuel De Jesus",
+      "position": "P",
+      "throws": "L"
+    },
+    {
+      "personId": 672782,
+      "name": "Yoendrys Gómez",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 694398,
+      "name": "Carlos Guzmán",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 641154,
+      "name": "Pablo López",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 600921,
+      "name": "Andrés Machado",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 608566,
+      "name": "Germán Márquez",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 672780,
+      "name": "Keider Montero",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 672907,
+      "name": "Oddanier Mosqueda",
+      "position": "P",
+      "throws": "L"
+    },
+    {
+      "personId": 672768,
+      "name": "Daniel Palencia",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 676498,
+      "name": "Ricardo Sánchez",
+      "position": "P",
+      "throws": "L"
+    },
+    {
+      "personId": 622608,
+      "name": "Antonio Senzatela",
+      "position": "P",
+      "throws": "R"
+    },
+    {
+      "personId": 624133,
+      "name": "Ranger Suárez",
+      "position": "P",
+      "throws": "L"
+    },
+    {
+      "personId": 672582,
+      "name": "Ángel Zerpa",
+      "position": "P",
+      "throws": "L"
+    },
+    {
+      "personId": 593958,
+      "name": "Eduardo Rodríguez",
+      "position": "P",
+      "throws": "L"
+    }
+  ],
+  "receptores": [
+    {
+      "personId": 661388,
+      "name": "William Contreras",
+      "position": "C"
+    },
+    {
+      "personId": 521692,
+      "name": "Salvador Pérez",
+      "position": "C"
+    },
+    {
+      "personId": 575929,
+      "name": "Willson Contreras",
+      "position": "C"
+    }
+  ],
+  "infielders": [
+    {
+      "personId": 650333,
+      "name": "Luis Arráez",
+      "position": "1B"
+    },
+    {
+      "personId": 665926,
+      "name": "Andrés Giménez",
+      "position": "2B"
+    },
+    {
+      "personId": 672580,
+      "name": "Maikel Garcia",
+      "position": "SS"
+    },
+    {
+      "personId": 553993,
+      "name": "Eugenio Suárez",
+      "position": "3B"
+    },
+    {
+      "personId": 650402,
+      "name": "Gleyber Torres",
+      "position": "DH"
+    },
+    {
+      "personId": 678545,
+      "name": "Ezequiel Tovar",
+      "position": "SS"
+    }
+  ],
+  "outfielders": [
+    {
+      "personId": 660670,
+      "name": "Ronald Acuña Jr.",
+      "position": "CF"
+    },
+    {
+      "personId": 673450,
+      "name": "Wilyer Abreu",
+      "position": "RF"
+    },
+    {
+      "personId": 694192,
+      "name": "Jackson Chourio",
+      "position": "LF"
+    }
+  ]
+}

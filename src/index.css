@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-fondo: #1a0509;
+  --color-vinotinto: #6B1021;
+  --color-dorado: #D4AF37;
+}
+
+body {
+  background-color: #1a0509;
+}
