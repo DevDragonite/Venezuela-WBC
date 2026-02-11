@@ -152,7 +152,7 @@ const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
@@ -204,7 +204,7 @@ export default function BaseballField() {
       <div className="w-full relative py-2 md:py-4">
         <svg
           viewBox="0 0 500 520"
-          className="mx-auto block h-auto min-h-[300px] md:min-h-[380px] w-full min-w-[300px] md:min-w-[380px] max-w-[560px] touch-pan-y"
+          className="mx-auto block h-auto w-full max-w-[560px] touch-pan-y"
           preserveAspectRatio="xMidYMid meet"
         >
           {/* Definiciones */}
@@ -254,8 +254,8 @@ export default function BaseballField() {
             const player = playerId ? PLAYER_MAP[playerId] : null
 
             // Dimensiones de la "Tarjeta" en coordenadas del SVG (Dinámicas para móvil)
-            const cardWidth = isMobile ? 45 : 60
-            const cardHeight = isMobile ? 60 : 70
+            const cardWidth = isMobile ? 38 : 60
+            const cardHeight = isMobile ? 52 : 70
             // Centrar la tarjeta en x, y
             const cardX = x - cardWidth / 2
             const cardY = y - cardHeight / 2
@@ -292,7 +292,7 @@ export default function BaseballField() {
 
         <DragOverlay>
           {activeId ? (
-            <div style={{ width: isMobile ? '45px' : '60px', height: isMobile ? '60px' : '70px' }}>
+            <div style={{ width: isMobile ? '38px' : '60px', height: isMobile ? '52px' : '70px' }}>
               <PlayerCard playerId={activeId} pos="" isOverlay />
             </div>
           ) : null}

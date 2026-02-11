@@ -88,38 +88,31 @@ function App() {
       </header>
 
       {/* Grid Principal Granular: 3 Rangos de alineación */}
-      <main className="max-w-[1700px] mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-8 lg:gap-y-0 items-stretch">
+      <main className="max-w-[1700px] mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-8 lg:gap-y-0 items-start">
 
         {/* ROW 1: Campo Izquierda vs Lineup Derecha */}
-        <div className="lg:col-span-8 bg-gradient-to-br from-black/60 to-transparent rounded-[2rem] lg:rounded-b-none lg:rounded-t-[3rem] p-4 md:p-8 border border-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
+        <div className="lg:col-span-8 order-1 bg-gradient-to-br from-black/60 to-transparent rounded-[2rem] lg:rounded-b-none lg:rounded-t-[3rem] p-4 md:p-8 border border-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B1021]/10 blur-[120px] -z-10"></div>
           <BaseballField />
         </div>
 
         {/* Lineup (Ocupa toda la altura de la fila 1) */}
-        <div className="lg:col-span-4 flex flex-col">
+        <div className="lg:col-span-4 order-2 flex flex-col h-full">
           <LineupPanel />
         </div>
 
-        {/* ROW 2 & 3: Rotación y Botón */}
-        {/* Lote Izquierdo: Divisor y Cartas */}
-        <div className="lg:col-span-8 flex flex-col">
-          <div className="bg-gradient-to-br from-black/60 to-transparent border-l border-r border-t lg:border-t-0 border-white px-8 rounded-t-[2rem] lg:rounded-none">
-            <div className="flex items-center gap-4 py-6 border-t border-white/10 lg:border-t-0">
-              <h3 className="text-[#D4AF37] font-black italic text-2xl uppercase tracking-tighter whitespace-nowrap">
-                Rotación de Abridores
-              </h3>
-              <div className="h-[1px] flex-1 bg-gradient-to-r from-[#D4AF37]/50 to-transparent"></div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-black/60 to-transparent rounded-b-[2rem] lg:rounded-b-[3rem] p-4 md:p-8 pt-0 border-b border-l border-r border-white shadow-2xl relative overflow-hidden">
-            <StartingRotation onlyCards={true} />
+        {/* 3. Header Rotación (Izquierda Medio) */}
+        <div className="lg:col-span-8 order-3 bg-gradient-to-br from-black/60 to-transparent border-l border-r border-t lg:border-t-0 border-white px-8 rounded-t-[2rem] lg:rounded-none">
+          <div className="flex items-center gap-4 py-6 border-t border-white/10 lg:border-t-0">
+            <h3 className="text-[#D4AF37] font-black italic text-2xl uppercase tracking-tighter whitespace-nowrap">
+              Rotación de Abridores
+            </h3>
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-[#D4AF37]/50 to-transparent"></div>
           </div>
         </div>
 
-        {/* Lote Derecho: Botón Publicar */}
-        <div className="lg:col-span-4 lg:row-start-2 lg:row-span-2 flex flex-col h-full min-h-[160px] lg:min-h-0">
+        {/* 4. Botón Publicar (Derecha - Abarca 2 filas en Desktop) */}
+        <div className="lg:col-span-4 lg:row-span-2 order-5 lg:order-4 flex flex-col pt-0 lg:pt-6 h-full min-h-[160px] lg:min-h-0">
           <button
             onClick={handlePublishClick}
             disabled={isCapturing}
@@ -140,6 +133,11 @@ function App() {
               </div>
             </div>
           </button>
+        </div>
+
+        {/* 5. Cartas Rotación (Izquierda Inferior) */}
+        <div className="lg:col-span-8 order-4 lg:order-5 bg-gradient-to-br from-black/60 to-transparent rounded-b-[2rem] lg:rounded-b-[3rem] p-4 md:p-8 pt-0 border-b border-l border-r border-white shadow-2xl relative overflow-hidden">
+          <StartingRotation onlyCards={true} />
         </div>
       </main>
 
