@@ -74,24 +74,24 @@ function App() {
       {showModal && <LegalDisclaimer onAccept={() => setShowModal(false)} />}
 
       {/* Header Premium */}
-      <header className="p-8 text-center border-b border-[#D4AF37]/20 bg-black/30 backdrop-blur-md">
-        <h1 className="text-5xl md:text-7xl font-black text-[#D4AF37] tracking-tighter uppercase italic drop-shadow-2xl">
+      <header className="p-4 md:p-8 text-center border-b border-[#D4AF37]/20 bg-black/30 backdrop-blur-md">
+        <h1 className="text-4xl md:text-7xl font-black text-[#D4AF37] tracking-tighter uppercase italic drop-shadow-2xl">
           VENEZUELA <span className="text-white">WBC 2026</span>
         </h1>
-        <div className="flex justify-center items-center gap-4 mt-4">
-          <span className="h-[1px] w-12 bg-[#D4AF37]/50"></span>
-          <p className="text-[#D4AF37]/80 text-xs md:text-sm tracking-[0.4em] uppercase font-bold">
+        <div className="flex justify-center items-center gap-4 mt-2 md:mt-4">
+          <span className="hidden md:block h-[1px] w-12 bg-[#D4AF37]/50"></span>
+          <p className="text-[#D4AF37]/80 text-[10px] md:text-sm tracking-[0.2em] md:tracking-[0.4em] uppercase font-bold">
             CENTRO DE MANDO VINOTINTO • EL EQUIPO DE TODOS!
           </p>
-          <span className="h-[1px] w-12 bg-[#D4AF37]/50"></span>
+          <span className="hidden md:block h-[1px] w-12 bg-[#D4AF37]/50"></span>
         </div>
       </header>
 
       {/* Grid Principal Granular: 3 Rangos de alineación */}
-      <main className="max-w-[1700px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-0 items-stretch">
+      <main className="max-w-[1700px] mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-8 lg:gap-y-0 items-stretch">
 
         {/* ROW 1: Campo Izquierda vs Lineup Derecha */}
-        <div className="lg:col-span-8 bg-gradient-to-br from-black/60 to-transparent rounded-t-[3rem] p-8 border-t border-l border-r border-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
+        <div className="lg:col-span-8 bg-gradient-to-br from-black/60 to-transparent rounded-[2rem] lg:rounded-b-none lg:rounded-t-[3rem] p-4 md:p-8 border border-white shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#6B1021]/10 blur-[120px] -z-10"></div>
           <BaseballField />
         </div>
@@ -101,24 +101,30 @@ function App() {
           <LineupPanel />
         </div>
 
-        {/* ROW 2: Header Rotación vs Inicio de Botón Publicar */}
-        {/* Lote Izquierdo: Divisor Amarillo */}
-        <div className="lg:col-span-8 bg-gradient-to-br from-black/60 to-transparent border-l border-r border-white px-8">
-          <div className="flex items-center gap-4 py-6 border-t border-white/10">
-            <h3 className="text-[#D4AF37] font-black italic text-2xl uppercase tracking-tighter whitespace-nowrap">
-              Rotación de Abridores
-            </h3>
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-[#D4AF37]/50 to-transparent"></div>
+        {/* ROW 2 & 3: Rotación y Botón */}
+        {/* Lote Izquierdo: Divisor y Cartas */}
+        <div className="lg:col-span-8 flex flex-col">
+          <div className="bg-gradient-to-br from-black/60 to-transparent border-l border-r border-t lg:border-t-0 border-white px-8 rounded-t-[2rem] lg:rounded-none">
+            <div className="flex items-center gap-4 py-6 border-t border-white/10 lg:border-t-0">
+              <h3 className="text-[#D4AF37] font-black italic text-2xl uppercase tracking-tighter whitespace-nowrap">
+                Rotación de Abridores
+              </h3>
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-[#D4AF37]/50 to-transparent"></div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-black/60 to-transparent rounded-b-[2rem] lg:rounded-b-[3rem] p-4 md:p-8 pt-0 border-b border-l border-r border-white shadow-2xl relative overflow-hidden">
+            <StartingRotation onlyCards={true} />
           </div>
         </div>
 
-        {/* Lote Derecho: Inicio del Botón (Alineado con el texto "Rotación") */}
-        <div className="lg:col-span-4 lg:row-span-2 pt-6 flex flex-col">
+        {/* Lote Derecho: Botón Publicar */}
+        <div className="lg:col-span-4 lg:row-start-2 lg:row-span-2 flex flex-col h-full min-h-[160px] lg:min-h-0">
           <button
             onClick={handlePublishClick}
             disabled={isCapturing}
             className={`
-              flex-1 group relative flex flex-col items-center justify-center gap-4 rounded-[2.5rem] font-black uppercase tracking-[0.4em] transition-all overflow-hidden border border-white shadow-2xl
+              flex-1 group relative flex flex-col items-center justify-center gap-4 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-0 font-black uppercase tracking-[0.4em] transition-all overflow-hidden border border-white shadow-2xl
               ${isCapturing
                 ? 'bg-white/10 text-white/40 cursor-wait'
                 : 'bg-gradient-to-br from-[#FFD700] via-[#D4AF37] to-[#8B6B10] text-[#1a0509] hover:scale-[1.01] active:scale-[0.99] shadow-[0_20px_60px_rgba(212,175,55,0.2)] hover:shadow-[0_30px_80px_rgba(212,175,55,0.4)]'}
@@ -127,18 +133,13 @@ function App() {
             <div className="absolute inset-0 w-full h-full bg-white/10 skew-x-[-25deg] -translate-x-full group-hover:animate-[shimmer_2s_infinite]"></div>
 
             <div className="relative z-10 flex flex-col items-center gap-3">
-              <span className="text-5xl mb-2">{isCapturing ? '⌛' : '🏆'}</span>
+              <span className="text-4xl lg:text-5xl mb-2">{isCapturing ? '⌛' : '🏆'}</span>
               <div className="text-center font-black">
-                <span className="text-xl block mb-1">{isCapturing ? 'GENERANDO...' : 'PUBLICAR'}</span>
-                <span className="text-2xl tracking-[0.2em]">{isCapturing ? 'ESPERE' : 'MI LINEUP'}</span>
+                <span className="text-lg lg:text-xl block mb-1">{isCapturing ? 'GENERANDO...' : 'PUBLICAR'}</span>
+                <span className="text-xl lg:text-2xl tracking-[0.2em]">{isCapturing ? 'ESPERE' : 'MI LINEUP'}</span>
               </div>
             </div>
           </button>
-        </div>
-
-        {/* ROW 3: Cartas de Rotación Izquierda vs Resto de Botón Derecha */}
-        <div className="lg:col-span-8 bg-gradient-to-br from-black/60 to-transparent rounded-b-[3rem] p-8 pt-0 border-b border-l border-r border-white shadow-2xl relative overflow-hidden">
-          <StartingRotation onlyCards={true} />
         </div>
       </main>
 

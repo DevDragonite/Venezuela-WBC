@@ -219,7 +219,7 @@ export default function LineupPanel() {
         >
             <div
                 ref={panelRef}
-                className="bg-white/5 backdrop-blur-3xl rounded-[2.5rem] p-6 border border-white shadow-2xl h-full flex flex-col"
+                className="bg-white/5 backdrop-blur-3xl rounded-[1.5rem] md:rounded-[2.5rem] p-4 md:p-6 border border-white shadow-2xl h-full flex flex-col"
             >
                 <div className="flex justify-between items-end mb-4 border-b border-white/10 pb-2">
                     <div>

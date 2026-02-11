@@ -187,10 +187,10 @@ export default function BaseballField() {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="w-full relative py-4">
+      <div className="w-full relative py-2 md:py-4">
         <svg
           viewBox="0 0 500 520"
-          className="mx-auto block h-auto min-h-[380px] w-full min-w-[380px] max-w-[560px] touch-pan-y"
+          className="mx-auto block h-auto min-h-[300px] md:min-h-[380px] w-full min-w-[300px] md:min-w-[380px] max-w-[560px] touch-pan-y"
           preserveAspectRatio="xMidYMid meet"
         >
           {/* Definiciones */}
