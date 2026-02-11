@@ -276,15 +276,15 @@ export default function BaseballField() {
                   ) : (
                     /* Estado Vacío */
                     <div
-                      className="w-full h-full flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 group bg-black/40 border-white/20 hover:bg-black/60 rounded-lg border shadow-lg backdrop-blur-sm overflow-hidden"
+                      className="w-full h-full flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 group bg-black/40 border-white/20 hover:bg-black/60 rounded-lg border shadow-lg backdrop-blur-sm overflow-visible"
                       onClick={() => handlePositionClick(pos)}
                     >
-                      <div className="w-9 h-9 lg:w-12 lg:h-12 flex items-center justify-center">
+                      <div className="w-8 h-8 lg:w-12 lg:h-12 flex items-center justify-center">
                         <span className="text-lg lg:text-xl font-black text-[#D4AF37]/50 opacity-30 group-hover:opacity-100 transition-opacity">
                           +
                         </span>
                       </div>
-                      <div className="text-[10px] lg:text-xs font-bold text-[#D4AF37] mt-0.5">{pos}</div>
+                      <div className="text-[9px] lg:text-xs font-bold text-[#D4AF37] mt-0.5">{pos}</div>
                     </div>
                   )}
                 </DroppablePosition>
