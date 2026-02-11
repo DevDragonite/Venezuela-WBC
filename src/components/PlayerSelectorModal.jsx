@@ -3,10 +3,10 @@ import { PLAYER_MAP, headshot, handleImageError } from './PlayerPool'
 import rosterData from '../data/players.json'
 
 const ALL_PLAYERS = [
-    ...rosterData.lanzadores,
-    ...rosterData.receptores,
-    ...rosterData.infielders,
-    ...rosterData.outfielders,
+    ...(rosterData?.lanzadores || []),
+    ...(rosterData?.receptores || []),
+    ...(rosterData?.infielders || []),
+    ...(rosterData?.outfielders || []),
 ]
 
 export default function PlayerSelectorModal({ position, onClose, onSelect }) {
@@ -20,14 +20,14 @@ export default function PlayerSelectorModal({ position, onClose, onSelect }) {
 
     // Determinar qué IDs excluir según el contexto (Campo o Lineup)
     let takenIds = []
-    if (position.startsWith('Bateador')) {
+    if (position?.startsWith('Bateador')) {
         // En Lineup: excluir jugadores ya en el lineup
-        takenIds = lineup.filter(id => id !== null)
+        takenIds = (lineup || []).filter(id => id !== null)
     } else {
         // En Campo (incluyendo DH visual): excluir jugadores ya en el campo o rotación
         takenIds = [
-            ...Object.values(field),
-            ...rotation
+            ...Object.values(field || {}),
+            ...(rotation || [])
         ].filter(id => id !== null)
     }
 

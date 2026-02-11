@@ -22,10 +22,10 @@ function App() {
   // Inicializar banca con todos los jugadores al cargar
   useEffect(() => {
     const allIds = [
-      ...rosterData.lanzadores,
-      ...rosterData.receptores,
-      ...rosterData.infielders,
-      ...rosterData.outfielders,
+      ...(rosterData?.lanzadores || []),
+      ...(rosterData?.receptores || []),
+      ...(rosterData?.infielders || []),
+      ...(rosterData?.outfielders || []),
     ].map(p => p.personId);
 
     initBench(allIds);

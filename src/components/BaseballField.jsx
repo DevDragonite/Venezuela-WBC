@@ -124,7 +124,7 @@ const PlayerCard = ({ playerId, pos, onClick, onDelete, isOverlay = false }) => 
         {/* Info */}
         <div className="relative z-10 mt-auto w-full text-center pb-1.5 h-full flex flex-col justify-end">
           <div className={`font-bold text-white px-1 shadow-black drop-shadow-md uppercase tracking-tighter leading-[0.85]
-            ${getSurname(player.name).length > 9 ? 'text-[7px]' : 'text-[9px]'}
+            ${(getSurname(player.name) || '').length > 9 ? 'text-[7px]' : 'text-[9px]'}
           `}>
             {getSurname(player.name)}
           </div>

@@ -4,10 +4,10 @@ import rosterData from '../data/players.json'
 
 /* Mapa rápido: personId → datos del jugador */
 const ALL_PLAYERS = [
-    ...rosterData.lanzadores,
-    ...rosterData.receptores,
-    ...rosterData.infielders,
-    ...rosterData.outfielders,
+    ...(rosterData?.lanzadores || []),
+    ...(rosterData?.receptores || []),
+    ...(rosterData?.infielders || []),
+    ...(rosterData?.outfielders || []),
 ]
 const PLAYER_MAP = Object.fromEntries(ALL_PLAYERS.map((p) => [p.personId, p]))
 
@@ -68,7 +68,7 @@ export default function PlayerPool() {
             </div>
 
             {CATEGORIES.map(({ key, label, icon }) => {
-                const players = rosterData[key].filter((p) => benchSet.has(p.personId))
+                const players = (rosterData?.[key] || []).filter((p) => benchSet?.has(p.personId))
                 if (players.length === 0) return null
 
                 return (

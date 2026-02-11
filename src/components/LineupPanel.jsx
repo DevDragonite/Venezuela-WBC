@@ -175,7 +175,7 @@ export default function LineupPanel() {
         })
     )
 
-    const items = lineup.map((_, index) => `slot-${index}`)
+    const items = (lineup || []).map((_, index) => `slot-${index}`)
 
     const handleDragStart = (event) => {
         setActiveId(event.active.id)

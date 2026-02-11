@@ -18,7 +18,7 @@ export default function ShareCard() {
     // Encontrar qué posición ocupa en el campo este jugador específico
     const getPlayerPositionInField = (playerId) => {
         if (!playerId) return 'DH';
-        const fieldPos = Object.entries(field).find(([_, id]) => id === playerId);
+        const fieldPos = Object.entries(field || {}).find(([_, id]) => id === playerId);
         if (fieldPos) return fieldPos[0];
         return PLAYER_MAP[playerId]?.position || 'DH';
     };
@@ -222,8 +222,8 @@ export default function ShareCard() {
                 <div className="flex flex-col max-w-[70%]">
                     <span className="text-xs text-[#D4AF37] font-bold uppercase tracking-[0.4em] mb-1">MANAGER OFICIAL</span>
                     <span className={`font-black italic uppercase tracking-tighter text-white drop-shadow-lg truncate leading-none
-                        ${managerFullName.length > 20 ? 'text-4xl' : 'text-5xl'}`}>
-                        {managerFullName}
+                        ${(managerFullName || '').length > 20 ? 'text-4xl' : 'text-5xl'}`}>
+                        {managerFullName || ''}
                     </span>
                 </div>
                 <div className="flex flex-col items-end">
