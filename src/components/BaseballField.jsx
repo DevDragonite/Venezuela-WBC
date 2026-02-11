@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DndContext, useDraggable, useDroppable, DragOverlay } from '@dnd-kit/core'
 import { Trash2 } from 'lucide-react'
 import { useGameStore } from '../store/useGameStore'
@@ -148,7 +148,21 @@ const PlayerCard = ({ playerId, pos, onClick, onDelete, isOverlay = false }) => 
   )
 }
 
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  return isMobile
+}
+
 export default function BaseballField() {
+  const isMobile = useIsMobile()
   const [modalPosition, setModalPosition] = useState(null)
   const [activeId, setActiveId] = useState(null) // For DragOverlay
   const field = useGameStore((s) => s.field)
@@ -239,9 +253,9 @@ export default function BaseballField() {
             const playerId = field[pos]
             const player = playerId ? PLAYER_MAP[playerId] : null
 
-            // Dimensiones de la "Tarjeta" en coordenadas del SVG
-            const cardWidth = 60
-            const cardHeight = 70
+            // Dimensiones de la "Tarjeta" en coordenadas del SVG (Dinámicas para móvil)
+            const cardWidth = isMobile ? 45 : 60
+            const cardHeight = isMobile ? 60 : 70
             // Centrar la tarjeta en x, y
             const cardX = x - cardWidth / 2
             const cardY = y - cardHeight / 2
@@ -264,10 +278,10 @@ export default function BaseballField() {
                       className="w-full h-full flex flex-col items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 group bg-black/40 border-white/20 hover:bg-black/60 rounded-lg border shadow-lg backdrop-blur-sm overflow-hidden"
                       onClick={() => handlePositionClick(pos)}
                     >
-                      <div className="text-[#D4AF37]/50 text-xl font-black opacity-30 group-hover:opacity-100 transition-opacity">
+                      <div className={`${isMobile ? 'text-lg' : 'text-xl'} font-black text-[#D4AF37]/50 opacity-30 group-hover:opacity-100 transition-opacity`}>
                         +
                       </div>
-                      <div className="text-[10px] font-bold text-[#D4AF37] mt-1">{pos}</div>
+                      <div className={`${isMobile ? 'text-[8px]' : 'text-[10px]'} font-bold text-[#D4AF37] mt-1`}>{pos}</div>
                     </div>
                   )}
                 </DroppablePosition>
@@ -278,7 +292,7 @@ export default function BaseballField() {
 
         <DragOverlay>
           {activeId ? (
-            <div className="w-[60px] h-[70px]">
+            <div style={{ width: isMobile ? '45px' : '60px', height: isMobile ? '60px' : '70px' }}>
               <PlayerCard playerId={activeId} pos="" isOverlay />
             </div>
           ) : null}
