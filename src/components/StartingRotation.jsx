@@ -92,7 +92,7 @@ export default function StartingRotation({ onlyCards = false }) {
                                             <div className="relative">
                                                 <img
                                                     src={headshot(playerId)}
-                                                    onError={(e) => handleImageError(playerId)}
+                                                    onError={(e) => handleImageError(e, playerId)}
                                                     className="w-14 h-14 rounded-full object-cover bg-black/50 border-2 border-[#D4AF37]"
                                                     alt={player.name}
                                                 />

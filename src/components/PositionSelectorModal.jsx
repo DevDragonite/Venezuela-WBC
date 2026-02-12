@@ -52,38 +52,19 @@ export default function PositionSelectorModal({ player, onClose, onSelect }) {
                     </p>
                 </div>
 
-                {/* Grid of Positions */}
+                {/* Grid of Positions (solo las disponibles) */}
                 <div className="grid grid-cols-3 gap-3">
-                    {/* Render custom order or strict groups */}
-                    {allowedPositions.map((pos) => {
-                        // const isAllowed = allowedPositions.includes(pos); // Implicitly true now
-                        const isOccupied = isPositionOccupied(pos);
-                        const isDisabled = isOccupied;
-
-                        let statusColor = "bg-[#D4AF37] text-black border-[#D4AF37] hover:scale-105 shadow-[0_0_15px_rgba(212,175,55,0.3)]";
-
-                        if (isOccupied) {
-                            statusColor = "bg-red-900/20 border-red-500/30 text-red-500/50 cursor-not-allowed";
-                        }
-
-                        return (
+                    {allowedPositions
+                        .filter((pos) => !isPositionOccupied(pos))
+                        .map((pos) => (
                             <button
                                 key={pos}
-                                onClick={() => !isDisabled && handleSelect(pos)}
-                                disabled={isDisabled}
-                                className={`
-                                    h-14 rounded-xl flex items-center justify-center font-black text-lg transition-all border
-                                    ${statusColor}
-                                    ${isDisabled ? 'opacity-50' : 'opacity-100 cursor-pointer'}
-                                `}
+                                onClick={() => handleSelect(pos)}
+                                className="h-14 rounded-xl flex items-center justify-center font-black text-lg transition-all border cursor-pointer bg-[#D4AF37] text-black border-[#D4AF37] hover:scale-105 shadow-[0_0_15px_rgba(212,175,55,0.3)] active:scale-95"
                             >
                                 {pos}
-                                {isOccupied && (
-                                    <span className="absolute text-[8px] bottom-1 font-normal opacity-70">OCUPADO</span>
-                                )}
                             </button>
-                        );
-                    })}
+                        ))}
                 </div>
 
                 {/* Close Button */}

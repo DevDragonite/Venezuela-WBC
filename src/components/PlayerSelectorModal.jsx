@@ -95,9 +95,15 @@ export default function PlayerSelectorModal({ position, onClose, onSelect }) {
                             <span className="text-white text-xl">×</span>
                         </button>
                     </div>
-                    <p className="text-white/50 text-sm">
-                        Posición: <span className="text-[#D4AF37] font-bold">{position}</span>
-                    </p>
+                    {position?.startsWith('Bateador') ? (
+                        <p className="text-white/70 text-sm">
+                            Escoge el <span className="text-[#D4AF37] font-black text-lg">{position.replace('Bateador ', '')}°</span> en el orden al bate
+                        </p>
+                    ) : (
+                        <p className="text-white/50 text-sm">
+                            Posición: <span className="text-[#D4AF37] font-bold">{position}</span>
+                        </p>
+                    )}
                 </div>
 
                 {/* Lista de jugadores */}

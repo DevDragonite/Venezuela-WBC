@@ -51,10 +51,44 @@ function App() {
           }
         });
 
-        const link = document.createElement('a');
-        link.download = `WBC_Venezuela_Mi_Lineup_${fullName.replace(/\s+/g, '_')}.png`;
-        link.href = dataUrl;
-        link.click();
+        const fileName = `WBC_Venezuela_Mi_Lineup_${fullName.replace(/\s+/g, '_')}.png`;
+
+        // Intentar Web Share API (móvil → abre share sheet → guardar en galería)
+        if (navigator.share && navigator.canShare) {
+          try {
+            const res = await fetch(dataUrl);
+            const blob = await res.blob();
+            const file = new File([blob], fileName, { type: 'image/png' });
+
+            if (navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                title: '¡Mi Lineup WBC Venezuela 2026!',
+                text: '¡Mira mi estrategia para el WBC! 🇻🇪⚾',
+                files: [file],
+              });
+            } else {
+              // Fallback: descarga directa
+              const link = document.createElement('a');
+              link.download = fileName;
+              link.href = dataUrl;
+              link.click();
+            }
+          } catch (shareErr) {
+            // Si el usuario cancela el share, no es un error real
+            if (shareErr.name !== 'AbortError') {
+              const link = document.createElement('a');
+              link.download = fileName;
+              link.href = dataUrl;
+              link.click();
+            }
+          }
+        } else {
+          // Desktop: descarga directa
+          const link = document.createElement('a');
+          link.download = fileName;
+          link.href = dataUrl;
+          link.click();
+        }
       } catch (err) {
         console.error('Error generando la imagen:', err);
       } finally {
