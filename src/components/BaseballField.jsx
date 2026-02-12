@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react'
-import { DndContext, useDraggable, useDroppable, DragOverlay } from '@dnd-kit/core'
+import {
+  DndContext,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  TouchSensor,
+  useDraggable,
+  useDroppable,
+  DragOverlay
+} from '@dnd-kit/core'
 import { Trash2 } from 'lucide-react'
 import { useGameStore } from '../store/useGameStore'
 import { PLAYER_MAP, headshot, handleImageError } from './PlayerPool'
@@ -33,19 +42,39 @@ const isValidMove = (player, targetPos) => {
   return true
 }
 
-const POSITION_COORDS = {
-  C: { x: 250, y: 420 },
-  '1B': { x: 380, y: 280 },
-  '2B': { x: 310, y: 170 },
-  '3B': { x: 120, y: 280 },
-  SS: { x: 190, y: 170 },
-  LF: { x: 80, y: 60 },
-  CF: { x: 250, y: 50 },
-  RF: { x: 420, y: 60 },
-  DH: { x: 90, y: 380 },
-}
+const POSITION_COORDS = (isMobile) => isMobile ? ({
+  // Mobile Grid - Locked to 360px context (LF Ref: 90, 65)
+  LF: { x: 90, y: 65 },
+  RF: { x: 360, y: 65 }, // Mirror mirrored (410 -> 360)
+  CF: { x: 225, y: 65 }, // New Center (90+360)/2
 
-const DIAMOND_PATH = 'M 250 480 L 380 280 L 250 100 L 120 280 Z'
+  SS: { x: 180, y: 220 },
+  '2B': { x: 270, y: 220 },
+
+  '3B': { x: 110, y: 350 },
+  '1B': { x: 340, y: 350 },
+
+  C: { x: 225, y: 480 },
+  DH: { x: 100, y: 480 },
+}) : ({
+  // Desktop Grid - Original Professional Layout (Centered at 250)
+  LF: { x: 80, y: 60 },
+  RF: { x: 420, y: 60 },
+  CF: { x: 250, y: 60 },
+
+  SS: { x: 190, y: 180 },
+  '2B': { x: 310, y: 180 },
+
+  '3B': { x: 120, y: 310 },
+  '1B': { x: 380, y: 310 },
+
+  C: { x: 250, y: 440 },
+  DH: { x: 90, y: 440 },
+})
+
+const DIAMOND_PATH = (isMobile) => isMobile
+  ? 'M 225 480 L 340 350 L 225 220 L 110 350 Z'
+  : 'M 250 440 L 375 310 L 250 180 L 125 310 Z'
 
 const DraggablePlayer = ({ id, children, disabled }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -164,10 +193,24 @@ const useIsMobile = () => {
 export default function BaseballField() {
   const isMobile = useIsMobile()
   const [modalPosition, setModalPosition] = useState(null)
-  const [activeId, setActiveId] = useState(null) // For DragOverlay
+  const [activeId, setActiveId] = useState(null)
   const field = useGameStore((s) => s.field)
   const removeFromField = useGameStore((s) => s.removeFromField)
   const movePlayer = useGameStore((s) => s.movePlayer)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
+  )
 
   const handleDragStart = (event) => {
     setActiveId(event.active.id)
@@ -200,12 +243,13 @@ export default function BaseballField() {
   }
 
   return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="w-full max-w-[95vw] aspect-square mx-auto flex items-center justify-center relative py-2 md:py-4">
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <div className={`mx-auto flex items-center justify-center relative py-1 md:py-4 ${isMobile ? 'w-[360px] h-auto' : 'w-full aspect-square'}`}>
         <svg
-          viewBox="0 0 500 520"
-          width="100%"
-          className="block h-auto touch-pan-y"
+          viewBox={isMobile ? "0 0 500 620" : "0 0 500 520"}
+          width={isMobile ? "360" : "100%"}
+          height={isMobile ? "auto" : "100%"}
+          className="block touch-pan-y"
           preserveAspectRatio="xMidYMid meet"
         >
           {/* Definiciones */}
@@ -221,42 +265,52 @@ export default function BaseballField() {
           </defs>
 
           {/* Campo exterior (césped) */}
-          <rect x="0" y="0" width="500" height="520" fill="url(#grass)" />
+          <rect x="0" y="0" width="500" height={isMobile ? 620 : 520} fill="url(#grass)" />
 
           {/* Líneas de foul hacia el outfield */}
-          <path d="M 250 480 L 0 100" fill="none" stroke="#FFFFFF" strokeWidth="3" />
-          <path d="M 250 480 L 500 100" fill="none" stroke="#FFFFFF" strokeWidth="3" />
+          <path d={isMobile ? "M 225 480 L -155 50" : "M 250 440 L -125 50"} fill="none" stroke="#FFFFFF" strokeWidth="3" />
+          <path d={isMobile ? "M 225 480 L 605 50" : "M 250 440 L 625 50"} fill="none" stroke="#FFFFFF" strokeWidth="3" />
 
           {/* Infield (tierra) */}
-          <path d={DIAMOND_PATH} fill="url(#infield)" stroke="#FFFFFF" strokeWidth="4" />
+          <path d={DIAMOND_PATH(isMobile)} fill="url(#infield)" stroke="#FFFFFF" strokeWidth="4" />
 
           {/* Líneas de las bases */}
-          <path d="M 250 480 L 380 280" fill="none" stroke="#FFFFFF" strokeWidth="2" />
-          <path d="M 380 280 L 250 100" fill="none" stroke="#FFFFFF" strokeWidth="2" />
-          <path d="M 250 100 L 120 280" fill="none" stroke="#FFFFFF" strokeWidth="2" />
-          <path d="M 120 280 L 250 480" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+          {isMobile ? (
+            <>
+              <path d="M 225 480 L 340 350" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+              <path d="M 340 350 L 225 220" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+              <path d="M 225 220 L 110 350" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+              <path d="M 110 350 L 225 480" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+            </>
+          ) : (
+            <>
+              <path d="M 250 440 L 375 310" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+              <path d="M 375 310 L 250 180" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+              <path d="M 250 180 L 125 310" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+              <path d="M 125 310 L 250 440" fill="none" stroke="#FFFFFF" strokeWidth="2" />
+            </>
+          )}
 
           {/* Home plate */}
-          {/* Home plate */}
           <polygon
-            points="250,480 265,460 250,455 235,460"
+            points={isMobile ? "225,480 240,460 225,455 210,460" : "250,440 265,420 250,415 235,420"}
             fill="#FFFFFF"
             stroke="#FFFFFF"
             strokeWidth="2"
           />
 
           {/* Montículo del Pitcher (Mound) */}
-          <circle cx="250" cy="290" r="18" fill="#5D2E0C" />
-          <rect x="245" y="288" width="10" height="4" fill="white" transform="rotate(0 250 290)" />
+          <circle cx={isMobile ? 225 : 250} cy={isMobile ? 350 : 310} r="18" fill="#5D2E0C" />
+          <rect x={isMobile ? 220 : 245} y={isMobile ? 348 : 308} width="10" height="4" fill="white" transform={`rotate(0 ${isMobile ? 225 : 250} ${isMobile ? 350 : 310})`} />
 
           {/* Posiciones interactivas (Cards) */}
-          {Object.entries(POSITION_COORDS).map(([pos, { x, y }]) => {
+          {Object.entries(POSITION_COORDS(isMobile)).map(([pos, { x, y }]) => {
             const playerId = field[pos]
             const player = playerId ? PLAYER_MAP[playerId] : null
 
             // Dimensiones de la "Tarjeta" en coordenadas del SVG (Dinámicas para móvil)
-            const cardWidth = isMobile ? 38 : 60
-            const cardHeight = isMobile ? 52 : 70
+            const cardWidth = 60
+            const cardHeight = 78
             // Centrar la tarjeta en x, y
             const cardX = x - cardWidth / 2
             const cardY = y - cardHeight / 2

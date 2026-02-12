@@ -48,7 +48,7 @@ export default function StartingRotation({ onlyCards = false }) {
                             key={game.id}
                             onClick={() => handleSlotClick(index)}
                             className={`
-                group relative h-40 rounded-2xl border transition-all cursor-pointer overflow-hidden
+                group relative h-44 rounded-2xl border transition-all cursor-pointer overflow-hidden
                 ${player
                                     ? 'bg-black/80 border-[#D4AF37] shadow-lg shadow-[#D4AF37]/10'
                                     : 'bg-white/5 border-white/10 hover:border-[#D4AF37]/50 hover:bg-white/10'
@@ -62,26 +62,26 @@ export default function StartingRotation({ onlyCards = false }) {
                                 {/* Header: Game Info */}
                                 <div className="flex justify-between items-start mb-2">
                                     <div className="flex-1 min-w-0">
-                                        <div className="text-[9px] text-[#D4AF37]/60 font-black uppercase leading-none mb-1">Vs</div>
-                                        <div className="flex items-center gap-1.5 max-w-full">
-                                            <span className="text-[10px] text-[#D4AF37] font-black uppercase truncate leading-none">
+                                        <div className="text-[10px] text-[#D4AF37]/60 font-black uppercase leading-none mb-1">Vs</div>
+                                        <div className="flex items-center gap-2 max-w-full">
+                                            <span className="text-[12px] text-[#D4AF37] font-black uppercase truncate leading-none">
                                                 {game.opponent}
                                             </span>
                                             <img
                                                 src={`https://flagcdn.com/16x12/${game.flag}.png`}
                                                 srcSet={`https://flagcdn.com/32x24/${game.flag}.png 2x`}
-                                                width="16"
-                                                height="12"
+                                                width="18"
+                                                height="14"
                                                 alt=""
                                                 className="border border-[#D4AF37]/50 rounded-sm shadow-sm shrink-0"
                                             />
                                         </div>
-                                        <div className="text-[9px] text-white/40 font-mono italic mt-1">
+                                        <div className="text-[10px] text-white/40 font-mono italic mt-1.5">
                                             {game.date}
                                         </div>
                                     </div>
-                                    <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#D4AF37] transition-colors">
-                                        <span className="text-[10px] text-white font-black">{index + 1}</span>
+                                    <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#D4AF37] transition-colors">
+                                        <span className="text-[12px] text-white font-black">{index + 1}</span>
                                     </div>
                                 </div>
 
@@ -92,13 +92,13 @@ export default function StartingRotation({ onlyCards = false }) {
                                             <div className="relative">
                                                 <img
                                                     src={headshot(playerId)}
-                                                    onError={(e) => handleImageError(e, playerId)}
-                                                    className="w-14 h-14 rounded-full object-cover bg-black/50 border border-[#D4AF37]"
+                                                    onError={(e) => handleImageError(playerId)}
+                                                    className="w-14 h-14 rounded-full object-cover bg-black/50 border-2 border-[#D4AF37]"
                                                     alt={player.name}
                                                 />
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <div className="text-white font-bold text-[11px] leading-tight uppercase tracking-tight">
+                                                <div className="text-white font-bold text-[12px] leading-tight uppercase tracking-tight">
                                                     {player.name}
                                                 </div>
                                             </div>

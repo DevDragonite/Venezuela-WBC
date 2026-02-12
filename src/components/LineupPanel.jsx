@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
     DndContext,
     closestCenter,
@@ -21,6 +21,19 @@ import { CSS } from '@dnd-kit/utilities'
 import { useGameStore } from '../store/useGameStore'
 import { PLAYER_MAP, headshot, handleImageError } from './PlayerPool'
 import PlayerSelectorModal from './PlayerSelectorModal'
+import PositionSelectorModal from './PositionSelectorModal'
+
+// Hook para detectar si es móvil
+const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(false)
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 1024) // lg breakpoint
+        check()
+        window.addEventListener('resize', check)
+        return () => window.removeEventListener('resize', check)
+    }, [])
+    return isMobile
+}
 
 // Custom modifier to lock horizontal axis
 const restrictToVerticalAxis = ({ transform }) => {
@@ -86,9 +99,9 @@ const LineupCard = ({ player, index, onRemove, onClick, isOverlay = false, liste
             onClick={onClick}
             {...listeners}
             {...attributes}
-            className={`group relative flex items-center gap-3 p-2 rounded-xl border border-white/5 transition-all select-none
+            className={`group relative flex items-center gap-4 p-3 rounded-2xl border border-white/5 transition-all select-none
             ${isOverlay ? 'bg-[#1a0509] shadow-2xl border-[#D4AF37]' : 'bg-gradient-to-r from-white/5 to-transparent hover:from-white/10'}
-            ${player ? 'border-[#D4AF37]/30' : 'border-white/5'} cursor-grab active:cursor-grabbing`}
+            ${player ? 'border-[#D4AF37]/30' : 'border-white/5'} cursor-grab active:cursor-grabbing mb-1`}
         >
             {/* Fondo decorativo con el número */}
             <span className="absolute left-2 text-6xl font-black italic text-white/5 select-none pointer-events-none group-hover:text-white/10 transition-colors">
@@ -98,13 +111,13 @@ const LineupCard = ({ player, index, onRemove, onClick, isOverlay = false, liste
             {/* Contenedor de contenido */}
             <div className="relative z-10 flex items-center w-full gap-4">
                 {/* Número de orden visible */}
-                <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg bg-black/40 border border-white/10 text-[#D4AF37] font-black text-[10px] shadow-inner">
+                <div className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg bg-black/40 border border-white/10 text-[#D4AF37] font-black text-[11px] shadow-inner">
                     {index + 1}
                 </div>
 
                 {player ? (
                     <>
-                        <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#D4AF37]/50 shadow-lg bg-black/50">
+                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#D4AF37]/60 shadow-lg bg-black/50">
                             <img
                                 src={headshot(player.personId)}
                                 onError={(e) => handleImageError(e, player.personId)}
@@ -156,8 +169,12 @@ export default function LineupPanel() {
     const setLineupSlot = useGameStore((s) => s.setLineupSlot)
     const removeFromLineup = useGameStore((s) => s.removeFromLineup)
     const reorderLineup = useGameStore((s) => s.reorderLineup)
+    const movePlayer = useGameStore((s) => s.movePlayer)
+
+    const isMobile = useIsMobile()
 
     const [modalSlot, setModalSlot] = useState(null)
+    const [selectedBatterId, setSelectedBatterId] = useState(null) // Para flujo móvil paso 1 -> paso 2
     const [activeId, setActiveId] = useState(null)
 
     // Referencia al contenedor para el portal del DragOverlay
@@ -199,6 +216,31 @@ export default function LineupPanel() {
         setModalSlot(index)
     }
 
+    const handlePlayerSelect = (playerId) => {
+        if (isMobile) {
+            // En móvil: Guardar jugador y abrir modal de posición (Paso 2)
+            setSelectedBatterId(playerId)
+            // No cerramos modalSlot todavía porque lo usamos para saber qué slot estamos editando
+            // Pero cerramos el selector visualmente (esto se maneja en el render condicional)
+        } else {
+            // En desktop: Asignación directa
+            setLineupSlot(modalSlot, playerId)
+            setModalSlot(null)
+        }
+    }
+
+    const handlePositionSelect = (position) => {
+        // Confirmar selección en móvil
+        if (modalSlot !== null && selectedBatterId) {
+            setLineupSlot(modalSlot, selectedBatterId)
+            setTimeout(() => movePlayer(selectedBatterId, position), 0) // Mover en el campo invisible
+
+            // Limpiar estados
+            setModalSlot(null)
+            setSelectedBatterId(null)
+        }
+    }
+
     const dropAnimationConfig = {
         sideEffects: defaultDropAnimationSideEffects({
             styles: {
@@ -228,7 +270,7 @@ export default function LineupPanel() {
                     </div>
                 </div>
 
-                <div className="space-y-1.5 p-1">
+                <div className="flex-1 flex flex-col justify-between py-2">
                     <SortableContext items={items} strategy={verticalListSortingStrategy}>
                         {lineup.map((playerId, index) => (
                             <SortableLineupItem
@@ -260,14 +302,26 @@ export default function LineupPanel() {
                     ) : null}
                 </DragOverlay>
 
-                <PlayerSelectorModal
-                    position={modalSlot !== null ? `Bateador ${modalSlot + 1}` : null}
-                    onClose={() => setModalSlot(null)}
-                    onSelect={(pid) => {
-                        setLineupSlot(modalSlot, pid)
-                        setModalSlot(null)
-                    }}
-                />
+                {/* Paso 1: Selector de Jugador */}
+                {modalSlot !== null && !selectedBatterId && (
+                    <PlayerSelectorModal
+                        position={`Bateador ${modalSlot + 1}`}
+                        onClose={() => setModalSlot(null)}
+                        onSelect={handlePlayerSelect}
+                    />
+                )}
+
+                {/* Paso 2: Selector de Posición (Solo Móvil) */}
+                {modalSlot !== null && selectedBatterId && (
+                    <PositionSelectorModal
+                        player={PLAYER_MAP[selectedBatterId]}
+                        onClose={() => {
+                            setSelectedBatterId(null)
+                            setModalSlot(null)
+                        }}
+                        onSelect={handlePositionSelect}
+                    />
+                )}
 
             </div>
         </DndContext>
