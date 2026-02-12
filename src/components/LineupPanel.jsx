@@ -133,8 +133,12 @@ const LineupCard = ({ player, index, onRemove, onClick, isOverlay = false, liste
                                     {currentPos}
                                 </span>
                             </div>
-                            <div className="text-white font-bold text-sm truncate uppercase tracking-tight">
-                                {player.name}
+                            <div className={`text-white font-bold uppercase tracking-tight ${(() => {
+                                    const lastName = player.name.includes(' ') ? player.name.split(' ').slice(1).join(' ') : player.name;
+                                    return lastName.length > 10 ? 'text-xs' : 'text-sm';
+                                })()
+                                }`}>
+                                {player.name.includes(' ') ? player.name.split(' ').slice(1).join(' ') : player.name}
                             </div>
                         </div>
 
