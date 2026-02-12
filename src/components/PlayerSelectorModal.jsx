@@ -67,19 +67,20 @@ export default function PlayerSelectorModal({ position, onClose, onSelect }) {
     const handleSelect = (playerId) => {
         if (onSelect) {
             onSelect(playerId)
+            // No llamar onClose: el padre controla el ciclo de vida del modal
         } else {
             movePlayer(playerId, position)
+            onClose()
         }
-        onClose()
     }
 
     return (
         <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-end p-6"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center lg:justify-end p-2 lg:p-6"
             onClick={onClose}
         >
             <div
-                className="bg-gradient-to-br from-[#1a0509] to-black w-full max-w-md h-full rounded-3xl border border-[#D4AF37]/20 shadow-2xl overflow-hidden flex flex-col"
+                className="bg-gradient-to-br from-[#1a0509] to-black w-full max-w-[95vw] lg:max-w-md h-[90vh] lg:h-full rounded-3xl border border-[#D4AF37]/20 shadow-2xl overflow-hidden flex flex-col"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
